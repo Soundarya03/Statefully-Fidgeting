@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:statefully_fidgeting/screens/joinhost.dart';
 import 'package:flutter/services.dart';
-import 'package:statefully_fidgeting/components/hostgamepopup.dart';
-import 'package:statefully_fidgeting/screens/result.dart';
-import 'screens/gameplay_tugofwar.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:statefully_fidgeting/components/fidget_spinner.dart';
@@ -20,52 +17,57 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.grey,
         textTheme: TextTheme(
-          title: TextStyle(
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w700,
-          ),
-          subtitle: TextStyle(
+          subtitle2: TextStyle(
             fontFamily: 'Quicksand',
             fontWeight: FontWeight.w500,
           ),
-          body1: TextStyle(
+          subtitle1: TextStyle(
             fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
           ),
-          body2: TextStyle(
+          bodyText1: TextStyle(
             fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
+          ),
+          bodyText2: TextStyle(
+            fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
           ),
           button: TextStyle(
             fontFamily: 'Quicksand',
             fontWeight: FontWeight.w700,
           ),
-          headline: TextStyle(
+          headline6: TextStyle(
+            fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
+          ),
+          headline5: TextStyle(
+            fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
+          ),
+          headline4: TextStyle(
+            fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
+          ),
+          headline3: TextStyle(
+            fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
+          ),
+          headline2: TextStyle(
             fontFamily: 'Quicksand',
             fontWeight: FontWeight.w600,
           ),
-          display1: TextStyle(
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-          ),
-          display2: TextStyle(
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-          ),
-          display3: TextStyle(
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-          ),
-          display4: TextStyle(
-            fontFamily: 'Quicksand',
-            fontWeight: FontWeight.w500,
-          ),
           overline: TextStyle(
             fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
           ),
           caption: TextStyle(
             fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w500,
           ),
-          subhead: TextStyle(
+          headline1: TextStyle(
             fontFamily: 'Quicksand',
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),

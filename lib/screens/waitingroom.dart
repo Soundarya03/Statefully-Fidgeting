@@ -1,5 +1,3 @@
-import 'dart:wasm';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +12,7 @@ class WaitingRoom extends StatelessWidget {
   String gameId;
   bool isAdmin;
   String name;
-  String password;
-  WaitingRoom({this.gameId, this.isAdmin, this.name,this.password});
+  WaitingRoom({this.gameId, this.isAdmin, this.name});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +21,7 @@ class WaitingRoom extends StatelessWidget {
           gameId: gameId,
           isAdmin: isAdmin,
           name: name,
-          password: password,
+          
         ),
       ),
     );
@@ -35,9 +32,9 @@ class WaitingroomWidget extends StatefulWidget {
   String gameId;
   bool isAdmin;
   String name;
-  String password = '';
+  
 
-  WaitingroomWidget({this.gameId, this.isAdmin, this.name,this.password});
+  WaitingroomWidget({this.gameId, this.isAdmin, this.name,});
   @override
   _WaitingRoomWidgetState createState() => _WaitingRoomWidgetState();
 }
@@ -166,7 +163,7 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
 
   Future<void> getPlayersList(String _uid, {String teamname = 'all'}) async {
     final response = await http
-        .get('https://game-backend.glitch.me/playerslist${teamname}/${_uid}');
+        .get('https://game-backend.glitch.me/playerslist$teamname/${_uid}');
 
     if (response.statusCode == 200) {
       print('Retrieved');
@@ -215,7 +212,7 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
   
 _launchURL() async {
   var url =
-      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID:%20${widget.gameId}\nPASSWORD :%20${widget.password}";
+      "https://wa.me/?text=Join%20a%20game%20of%20'TUG%20OF%20WAR'%20on%20Statefully%20Fidgeting.\n\nGAME%20ID:%20${widget.gameId}\n";
   if (await canLaunch(url)) {
     await launch(url);
   } else {

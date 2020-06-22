@@ -2,15 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-//import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:ffi';
-
 import 'package:url_launcher/url_launcher.dart';
-import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
-import 'package:vsync_provider/vsync_provider.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 

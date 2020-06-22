@@ -18,25 +18,20 @@ environment:
 
 dependencies:
   
-  extended_navbar_scaffold: ^1.0.1
-  vsync_provider: ^0.4.1
   expandable_bottom_bar: ^1.0.2
   slimy_card: ^1.0.4
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  cloud_firestore: ^0.13.5
-  url_launcher: ^5.4.5
-  shared_preferences: ^0.5.7
-  uuid: ^2.0.4
-  http: ^0.12.1
-  fluttertoast: ^4.0.1
+  cupertino_icons:
+  cloud_firestore:
+  url_launcher:
+  shared_preferences:
+  http:
+  fluttertoast:
   audioplayers: ^0.13.2
   flutter_icons: ^1.1.0
-  flutter_shine: ^0.0.5
+  random_string: ^2.0.1
+  flutter_socket_io:
 
 dev_dependencies:
   flutter_test:

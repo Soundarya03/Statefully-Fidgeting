@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
 import 'package:statefully_fidgeting/screens/waitingroom.dart';
-import 'package:uuid/uuid.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:ffi';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -34,9 +30,9 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
       backgroundColor: Colors.red,
       textColor: Colors.white,
       fontSize: 16.0);
-  Future<void> joinRoom(String _uid, String _password, String _name) async {
+  Future<void> joinRoom(String _uid,String _name) async {
     final response = await http.get(
-        'https://game-backend.glitch.me/joinRoom/${_uid}/${_password}/${_name}');
+        'https://game-backend.glitch.me/joinRoom/${_uid}/${_name}');
 
     if (response.statusCode == 200) {
       print('Joined');
@@ -48,49 +44,36 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                     gameId: _uid,
                     isAdmin: false,
                     name: _name,
-                    password: _password,
+                    
                   )));
-      /* Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) => GamePlayScreen(
-                    gameId: _uid,
-                    isAdmin: false,
-                    name: _name,
-))
-);*/
+      
 
-    } else if (response.statusCode == 300) {
+    } else if (response.statusCode == 404) {
       setState(() {
         errorMessage = "There is no ongoing game for this GameID";
       });
       showtoast();
       print('Game not found');
-    } else if (response.statusCode == 201) {
-      setState(() {
-        errorMessage = "Incorrect Password";
-        showtoast();
-      });
-      print('Wrong Password');
     } else if (response.statusCode == 202) {
       setState(() {
         errorMessage =
             "Player with this name already exists, please use a different name or contact the host";
-        showtoast();
+        
       });
+      showtoast();
       print("player with this name already exists");
     } else {
       setState(() {
         errorMessage = "Failed to join room";
-        showtoast();
+        
       });
+      showtoast();
       throw Exception('Failed join room');
     }
   }
 
   _displayJoinDialog(BuildContext context) async {
     TextEditingController _idController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
     TextEditingController _nameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
     return showDialog(
@@ -137,24 +120,8 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                       return null;
                     },
                   ),
-                  TextFormField(
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                        hintText: "Enter the password",
-                        prefixIcon: Icon(Icons.vpn_key)),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter the passsword';
-                      } else if (value.length < 3) {
-                        return 'Your name must be atleast 3 characters long';
-                      } else if (value.length > 12) {
-                        return 'Too long !';
-                      }
-                      return null;
-                    },
-                  ),
-                  //Text(errorMessage),
+                
+                
                 ],
               ),
             ),
@@ -173,9 +140,6 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                 onPressed: () {
                   playLocalAsset();
 
-                  String password = _passwordController.text == ""
-                      ? "password"
-                      : _passwordController.text.trim();
                   String gameID = _idController.text == ""
                       ? "id"
                       : _idController.text.trim();
@@ -183,7 +147,7 @@ class _JoinGamePopupState extends State<JoinGamePopup> {
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
-                    joinRoom(gameID, password, name);
+                    joinRoom(gameID, name);
                   }
 
                   //Navigator.pop(context);

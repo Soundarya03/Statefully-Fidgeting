@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
+import 'package:random_string/random_string.dart';
 import 'package:statefully_fidgeting/screens/waitingroom.dart';
-import 'package:uuid/uuid.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'dart:ffi';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -21,11 +18,9 @@ class _HostGamePopupState extends State<HostGamePopup> {
     AudioCache cache = new AudioCache();
     return await cache.play("chime_ping.mp3");
   }
-
-  var uuid = Uuid();
-  Future<int> createRoom(String _uid, String _password, String _name) async {
+  Future<int> createRoom(String _uid, String _name) async {
     final response = await http.get(
-        'https://game-backend.glitch.me/createRoom/${_uid}/${_password}/${_name}');
+        'https://game-backend.glitch.me/createRoom/${_uid}/${_name}');
 
     if (response.statusCode == 200) {
       print('Room created');
@@ -38,7 +33,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
                     gameId: _uid,
                     isAdmin: true,
                     name: _name,
-                    password: _password,
+
                   )));
       return 200;
     } else if (response.statusCode == 400) {
@@ -49,8 +44,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
   }
 
   _displayCreateDialog(BuildContext context) async {
-    final String gameID = uuid.v4();
-    TextEditingController _passwordController = TextEditingController();
+    final String gameID = randomNumeric(8);
     TextEditingController _nameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
     return showDialog(
@@ -66,7 +60,6 @@ class _HostGamePopupState extends State<HostGamePopup> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  //Text("Game ID : $gameID"),
 
                   TextFormField(
                     keyboardType: TextInputType.visiblePassword,
@@ -85,23 +78,7 @@ class _HostGamePopupState extends State<HostGamePopup> {
                       return null;
                     },
                   ),
-                  TextFormField(
-                    keyboardType: TextInputType.visiblePassword,
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                        hintText: "Enter a Password",
-                        prefixIcon: Icon(Icons.vpn_key)),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'You cannot leave this field empty';
-                      } else if (value.length < 3) {
-                        return 'Password must be atleast 3 characters long';
-                      } else if (value.length > 12) {
-                        return 'Too long !';
-                      }
-                      return null;
-                    },
-                  ),
+                  Text('Room ID : $gameID'),
                 ],
               ),
             ),
@@ -119,14 +96,11 @@ class _HostGamePopupState extends State<HostGamePopup> {
                 ),
                 onPressed: () {
                   playLocalAsset();
-                  String password = _passwordController.text == ""
-                      ? "password"
-                      : _passwordController.text.trim();
                   String name = _nameController.text == ""
                       ? "id"
                       : _nameController.text.trim();
                   if (_formKey.currentState.validate()) {
-                    createRoom(gameID, password, name);
+                    createRoom(gameID, name);
                   }
 
                   //Navigator.pop(context);
