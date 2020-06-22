@@ -5,6 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:statefully_fidgeting/main.dart';
 import 'package:statefully_fidgeting/screens/gameplay_tugofwar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -140,6 +141,23 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
     });
   }
 
+  Future<void> leaveGame() async {
+    final response = await http.get(
+        'https://game-backend.glitch.me/leavegame/${widget.gameId}/${widget.name}');
+
+    if (response.statusCode == 200) {
+      print('Left');
+       Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => LandingPageMain()));
+     
+      
+    } else {
+      throw Exception('Failed to leave game');
+    }
+  }
+
   Future<void> leaveTeam(String _teamname) async {
     final response = await http.get(
         'https://game-backend.glitch.me/leaveteam/${widget.gameId}/${_teamname}/${widget.name}');
@@ -188,8 +206,7 @@ class _WaitingRoomWidgetState extends State<WaitingroomWidget>
         });
         print(this.playersList);
       }
-    } else if (response.statusCode == 201) {
-      print('Wrong Password');
+    
     } else {
       throw Exception('Failed join room');
     }
@@ -230,11 +247,11 @@ _launchURL() async {
                         .document(widget.gameId)
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) return CircularProgressIndicator();
+                      if (!snapshot.hasData) return Center(child:CircularProgressIndicator());
 
                       if (snapshot.hasData) {
                         var docs =
-                            snapshot.data.data; //stpring all gamedata here
+                            snapshot.data.data; //storing all gamedata here
 
                         // when the waiting toggle is switched
                         if (docs['isWaiting'] == false) {
@@ -502,7 +519,7 @@ _launchURL() async {
                               FlatButton(
                                 child: Text("Leave Lobby"),
                                 onPressed: () {
-                                  //leave game
+                                  leaveGame();
                                 },
                               )
                             ],

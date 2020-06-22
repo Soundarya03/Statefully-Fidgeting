@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 import 'package:statefully_fidgeting/screens/waitingroom.dart';
 import 'dart:async';
@@ -18,14 +19,36 @@ class _HostGamePopupState extends State<HostGamePopup> {
     AudioCache cache = new AudioCache();
     return await cache.play("chime_ping.mp3");
   }
-  Future<int> createRoom(String _uid, String _name) async {
-    final response = await http.get(
-        'https://game-backend.glitch.me/createRoom/${_uid}/${_name}');
+
+  bool isLoading;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  showtoast(String errorMessage) => Fluttertoast.showToast(
+      msg: errorMessage,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
+
+  Future<void> createRoom(String _uid, String _name) async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http
+        .get('https://game-backend.glitch.me/createRoom/${_uid}/${_name}');
 
     if (response.statusCode == 200) {
       print('Room created');
-
-      Navigator.pop(context);
+      playLocalAsset();
+      
       Navigator.push(
           context,
           new MaterialPageRoute(
@@ -33,14 +56,18 @@ class _HostGamePopupState extends State<HostGamePopup> {
                     gameId: _uid,
                     isAdmin: true,
                     name: _name,
-
                   )));
-      return 200;
+      showtoast("Room created");
     } else if (response.statusCode == 400) {
-      return 400;
+      showtoast("Your request to create a room has been rejected.");
     } else {
+      showtoast("Please try again later");
+
       throw Exception('Failed create room');
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   _displayCreateDialog(BuildContext context) async {
@@ -60,7 +87,6 @@ class _HostGamePopupState extends State<HostGamePopup> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-
                   TextFormField(
                     keyboardType: TextInputType.visiblePassword,
                     controller: _nameController,
@@ -90,22 +116,24 @@ class _HostGamePopupState extends State<HostGamePopup> {
                 },
               ),
               new FlatButton(
-                child: new Text(
-                  'Host',
-                  style: TextStyle(color: Colors.green),
-                ),
-                onPressed: () {
-                  playLocalAsset();
-                  String name = _nameController.text == ""
-                      ? "id"
-                      : _nameController.text.trim();
-                  if (_formKey.currentState.validate()) {
-                    createRoom(gameID, name);
-                  }
+                      child:  isLoading
+                  ? new CircularProgressIndicator()
+                  :new Text(
+                        'Host',
+                        style: TextStyle(color: Colors.green),
+                      ),
+                      onPressed: () {
+                        
+                        String name = _nameController.text == ""
+                            ? "id"
+                            : _nameController.text.trim();
+                        if (_formKey.currentState.validate()) {
+                          createRoom(gameID, name);
+                        }
 
-                  //Navigator.pop(context);
-                },
-              )
+                        Navigator.pop(context);
+                      },
+                    )
             ],
           );
         });

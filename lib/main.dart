@@ -108,7 +108,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
         // ),
         width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Text(
               "Statefully Fidgeting",
@@ -122,11 +122,11 @@ class _LandingPageMainState extends State<LandingPageMain> {
                   ),
                 ],
                 color: dynamiciconcolor,
-                fontSize: 28,
+                fontSize: 30,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Quicksand',
               ),
-            ),
+            ),/*
             CircleAvatar(
               radius: 50,
               backgroundColor: Colors.lightGreenAccent,
@@ -163,7 +163,7 @@ class _LandingPageMainState extends State<LandingPageMain> {
                   ),
                 ),
               ),
-            ),
+            ),*/
             FidgetSpinner(),
           ],
         ),

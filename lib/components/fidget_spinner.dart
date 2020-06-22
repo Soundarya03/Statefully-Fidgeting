@@ -1,6 +1,10 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:math' as math;
+
+import 'package:statefully_fidgeting/screens/joinhost.dart';
 
 class FidgetSpinner extends StatefulWidget {
   @override
@@ -42,26 +46,70 @@ class _FidgetSpinnerState extends State<FidgetSpinner>
     animController.forward();
   }
 
+  Future<AudioPlayer> playLocalAsset() async {
+    AudioCache cache = new AudioCache();
+    return await cache.play("tspt_game_button_04_040.mp3");
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    String img = (!isDarkMode)
-        ? 'images/fidget-spinner.jpg'
-        : 'images/fidget-spinner1.jpg';
+    String img = 'images/circle-cropped.png';
 
-    return Container(
-      child: Transform.rotate(
-        angle: animation.value,
-        child: Container(
-          alignment: Alignment.center,
-          child: Image.asset(
-            img,
-            height: 300,
-            width: 300,
+    return Stack(children: <Widget>[
+      Container(
+        child: Transform.rotate(
+          angle: animation.value,
+          child: Container(
+            alignment: Alignment.center,
+            child: Image.asset(
+              img,
+              height: 300,
+              width: 300,
+            ),
           ),
         ),
       ),
-    );
+      Positioned(
+          bottom: 108,
+          left: 153,
+          child: Transform.rotate(
+            angle: 0,
+            child: CircleAvatar(
+              radius: 42,
+              backgroundColor: Colors.lightGreenAccent,
+              child: InkWell(
+                highlightColor: Colors.green,
+                splashColor: Colors.blue,
+                borderRadius: BorderRadius.circular(25),
+                onTap: () {
+                  playLocalAsset();
+
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => JoinHostChoice()));
+                  //playLocalAsset();
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      "PLAY!",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        fontFamily: 'Quicksand',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )),
+    ]);
   }
 
   @override
